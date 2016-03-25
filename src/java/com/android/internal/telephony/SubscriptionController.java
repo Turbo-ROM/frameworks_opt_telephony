@@ -44,6 +44,7 @@ import android.text.format.Time;
 import android.util.Log;
 import java.util.Objects;
 import com.android.internal.telephony.IccCardConstants.State;
+import com.android.internal.util.slim.DeviceUtils;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -1404,9 +1405,11 @@ public class SubscriptionController extends ISub.Stub {
                 Settings.Global.MULTI_SIM_DATA_CALL_SUBSCRIPTION,
                 SubscriptionManager.INVALID_SUBSCRIPTION_ID);
 
-        if (subId == SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
-            subId = getDefaultSubId();
-        }
+	if (DeviceUtils.deviceSupportsMobileData(mContext)) {
+            if (subId == SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
+        	subId = getDefaultSubId();
+            }
+	}
 
         if (VDBG) logd("[getDefaultDataSubId] subId= " + subId);
         return subId;
